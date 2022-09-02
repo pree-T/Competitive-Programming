@@ -1,0 +1,160 @@
+//Google interview question solution
+The names shall be printed in order of heirarchy and nested under their manager. Alice is the top manager with the id of 8. Bob and Emp7 are nested under Alice as their managerId is 8 and Alice's id is 8. Hope this makes sense.
+
+/// Pretty print org chart
+
+Solution
+
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+stack<string> st;
+
+
+void dfs(unordered_map<int,vector<int>> &adj,int s,int src,unordered_map<int,string> &names)
+{
+    
+   
+    for(auto it:adj[src])
+    {
+        dfs(adj,s+1,it,names);
+    }
+    string t="";
+    int i=0;
+    while(i++<s)
+    t=t+" ";
+    st.push(t+names[src]);
+    
+}
+
+int main()
+{
+   unordered_map<int,int> mp;
+   mp.insert({8,8});
+   mp.insert({2,8});
+   mp.insert({3,2});
+   mp.insert({4,3});
+   mp.insert({5,4});
+   mp.insert({6,3});
+   mp.insert({7,8});
+   unordered_map<int,string> names;
+   names.insert({8,"Alice"});
+   names.insert({2,"Bob"});
+   names.insert({3,"Sundari"});
+   names.insert({4,"Preeti"});
+   names.insert({5,"Pushpinder"});
+   names.insert({6,"Hello Kaun"});
+   names.insert({7,"Chandan Chanchal"});
+   
+   int src=0;
+   unordered_map<int,vector<int>> adj;
+   for(auto it:mp)
+   {
+       if(it.first==it.second)
+       src=it.first;
+       else
+       adj[it.second].push_back(it.first);
+       
+   }
+   dfs(adj,2,src,names);
+   
+   while(!st.empty())
+   {
+       cout<<st.top()<<endl;
+       st.pop();
+   }
+   
+   
+
+    return 0;
+}
+
+
+// Alice
+//   Bob
+//     Emp3
+//       Emp4
+//         Emp5
+//       Emp6
+//   Emp7
+
+const EMPLOYEES = [
+    { id: 8, managerId: 8, name: "Alice" },
+    { id: 2, managerId: 8, name: "Bob" },
+    { id: 3, managerId: 2, name: "Emp3" },
+    { id: 4, managerId: 3, name: "Emp4" },
+    { id: 5, managerId: 4, name: "Emp5" },
+    { id: 6, managerId: 3, name: "Emp6" },
+    { id: 7, managerId: 8, name: "Emp7" },
+];
+
+
+Solution
+
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+stack<string> st;
+
+
+void dfs(unordered_map<int,vector<int>> &adj,int s,int src,unordered_map<int,string> &names)
+{
+    
+   
+    for(auto it:adj[src])
+    {
+        dfs(adj,s+1,it,names);
+    }
+    string t="";
+    int i=0;
+    while(i++<s)
+    t=t+" ";
+    st.push(t+names[src]);
+    
+}
+
+int main()
+{
+   unordered_map<int,int> mp;
+   mp.insert({8,8});
+   mp.insert({2,8});
+   mp.insert({3,2});
+   mp.insert({4,3});
+   mp.insert({5,4});
+   mp.insert({6,3});
+   mp.insert({7,8});
+   unordered_map<int,string> names;
+   names.insert({8,"Alice"});
+   names.insert({2,"Bob"});
+   names.insert({3,"Sundari"});
+   names.insert({4,"Preeti"});
+   names.insert({5,"Pushpinder"});
+   names.insert({6,"Hello Kaun"});
+   names.insert({7,"Chandan Chanchal"});
+   
+   int src=0;
+   unordered_map<int,vector<int>> adj;
+   for(auto it:mp)
+   {
+       if(it.first==it.second)
+       src=it.first;
+       else
+       adj[it.second].push_back(it.first);
+       
+   }
+   dfs(adj,2,src,names);
+   
+   while(!st.empty())
+   {
+       cout<<st.top()<<endl;
+       st.pop();
+   }
+   
+   
+
+    return 0;
+}
