@@ -1,0 +1,51 @@
+class Solution {
+    
+    double cor=0.001;
+public:
+    bool judgePoint24(vector<int>& cards) {
+        bool res=false;
+        vector<double> card(cards.begin(),cards.end());
+        dfs(card,res);
+        return res;
+        
+    }
+    void dfs(vector<double> &c,bool &res)
+    {
+        if(res==true)
+            return;
+        if(c.size()==1)
+        {
+            if(abs(c[0]-24)<cor)
+                res=true;
+            return;
+        }
+        
+        for(int i=0;i<c.size();i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                double f=c[i];
+                double s=c[j];
+                vector<double> op{f+s,s-f,f-s,f*s};
+                
+                if(s>cor)
+                     op.push_back(f/s);
+                if(f>cor)
+                     op.push_back(s/f);
+                c.erase(c.begin()+i);
+                c.erase(c.begin()+j);
+                for(auto d:op)
+                {
+                    c.push_back(d);
+                    dfs(c,res);
+                    c.pop_back();
+                }
+                c.insert(c.begin()+j,s);
+                c.insert(c.begin()+i,f);  
+                
+            }
+        }
+    }
+};
+
+//https://leetcode.com/problems/24-game/discuss/2382483/C%2B%2B-oror-backtracking
