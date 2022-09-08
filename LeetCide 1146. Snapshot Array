@@ -1,0 +1,29 @@
+class SnapshotArray {
+    vector<unordered_map<int,int>> mp;
+   
+    int count;
+public:
+    SnapshotArray(int l) {
+       mp.resize(l);
+        count=0;
+        
+    }
+    
+    void set(int index, int val) {
+        mp[index][count]=val;
+    }
+    
+    int snap() {
+        
+       return count++;
+        
+    }
+    
+    int get(int index, int snap_id) {
+        
+        while(snap_id>=0 && mp[index].find(snap_id)==mp[index].end())
+            --snap_id;
+        return mp[index][snap_id];
+        
+    }
+};
