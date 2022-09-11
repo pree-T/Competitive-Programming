@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int minCost(vector<int>& houses, vector<vector<int>>& cost, int m, int n, int target) {
+        
+        vector<vector<vector<int>>>dp(m+1,vector<vector<int>>(target+1,vector<int>(m+1,-1)));
+        int ans=solver(houses,cost,0,m,n,0,target,0,dp);
+        if(ans!=1e9)
+            return ans;
+        else
+            return -1;
+        
+    }
+    
+    int solver(vector<int> &h,vector<vector<int>>& cost,int i,int m,int n,int t,int target, int prev,vector<vector<vector<int>>> &dp)
+    {
+        
+        if(i==m)
+        {
+            if(t==target)
+            {
+                return 0;
+            }
+            else
+                return 1e9;
+        }
+        if(t>target)
+            return 1e9;
+        if(dp[i][t][prev]!=-1)
+            return dp[i][t][prev];
+        
+        int ans=1e9;
+        
+        if(h[i]!=0)
+        {
+            if(h[i]!=prev)
+                ans=min(ans,0+solver(h,cost,i+1,m,n,t+1,target,h[i],dp));
+            else
+                ans=min(ans,0+solver(h,cost,i+1,m,n,t,target,h[i],dp));
+        }
+        else
+        {
+            for(int j=0;j<n;j++)
+            {
+                if((j+1)!=prev)
+                    ans=min(ans,cost[i][j]+solver(h,cost,i+1,m,n,t+1,target,j+1,dp));
+                else
+                    ans=min(ans,cost[i][j]+solver(h,cost,i+1,m,n,t,target,j+1,dp));
+            }
+        }
+        
+        return dp[i][t][prev]=ans;
+    }
+};
