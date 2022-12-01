@@ -1,0 +1,65 @@
+The key to this solution lies in the fact that for any two numbers a and b, the sum of number of set bits in (a AND b) and (a OR b) = sum of number of set bits in a and b individually.
+
+
+But why is this true? If we look closely at how AND and OR operations work, we can find out.
+
+Now if we take A OR B, the number of set bits in the answer will be (x+y-k). This is because in the OR operation, if either of the bits is 1, the resultant bit at that position is also set. This means that for A, there will be a contribution of x set bits to the result and from B, a contibution of y set bits. But the places where the set bits of A and B coincide must've been counted twice in the result as they will produce only one set bit in the answer. Hence, to accomodate this we subtract k from (x+y).
+For AND operation, the number of set bits in the answer will simply be k as this the number of bits where both the bits in A as well as B are 1.
+
+Hence, sum of the number of set bits in (A OR B) and (A AND B) = x+y-k+k = x+y = sum of set bits in A and B.
+
+Now, this problem simply reduces to finding the number of distinct pairs such that the sum of number of set bits in both the number is >= k.
+
+If we just had to find the number of distinct pairs where the sum is equal to k, we could have used a hashmap, but we also need to find the pairs where the sum is greater than k.
+
+We can utilise the fact that any number in the given input range will have at most 32 bits. So if we have an array where we count how many numbers in the array have i bits set in their binary representation, where 0 <= i <= 31, then we can easily calculate the number of distinct pairs whose sum of set bits is >= k by looping through this array twice, and just with a complexity of O(32 * 32). Also, we need to make sure we keep a count of only distinct numbers in this array as we need to form distinct pairs. We can use a set for this.
+
+class Solution {
+public:
+    int count_bits(int num)
+    {  
+        int sum = 0;
+         
+        for(int i=0;i<32;i++)
+        {
+            sum += (((1<<i)&num)!=0); 
+        }
+        
+        return sum;   
+    }
+    long long countExcellentPairs(vector<int>& nums, int k)
+    {
+        
+        long long int ans = 0;
+    
+        vector<int>bit_freq(32,0);
+        set<int>distinct;
+        
+        for(int i=0;i<nums.size();i++)
+        {
+            if(distinct.find(nums[i])==distinct.end())
+            {  
+                distinct.insert(nums[i]);
+                int set_bits = count_bits(nums[i]);
+                bit_freq[set_bits]++;
+            }
+        }
+        
+        for(int first=0;first<32;first++)
+        {
+            for(int second=0;second<32;second++)
+            {
+                if(first+second>=k)
+                {
+                    ans += (1ll*bit_freq[first]*bit_freq[second]);
+                }  
+            }
+        }
+        
+        return ans;
+    }
+};
+Complexity Analysis
+
+Time Complexity: O(32 * n + 32 * 32). Here, n is the size of the given array. We iterate over the array once and to find the number of set bits we iterate over each number's 32 bits. After that we have two nested for loops over the bit frequency array which accounts for the term 32 * 32.
+Space Complexity: O(n + 32). We use a set to keep track of the distinct elements in the array which takes O(n) space and an array for bit frequency of length 32 which takes O(32) space.
